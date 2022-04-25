@@ -81,14 +81,17 @@
     var MoodContract;
     var signer;    
 
-    provider.listAccounts().then((accounts) => {
-    signer = provider.getSigner(accounts[0]);
-    MoodContract = new ethers.Contract(
-      MoodContractAddress,
-      MoodContractABI,
-      signer
-    );
-  });
+    provider.send("eth_requestAccounts", []).then(() => {
+      
+      provider.listAccounts().then((accounts) => {
+        signer = provider.getSigner(accounts[0]);
+        MoodContract = new ethers.Contract(
+          MoodContractAddress,
+          MoodContractABI,
+          signer
+        );
+      });
+    });
 
     async function getMood() {
     const getMoodPromise = MoodContract.getMood();
@@ -101,7 +104,7 @@
     const setMoodPromise = MoodContract.setMood(mood);
     await setMoodPromise;
   }
-  
+
   </script>
 
 </html>
